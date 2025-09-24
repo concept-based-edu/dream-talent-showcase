@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>꿈과 끼를 펼쳐요 - 프로젝트 가시화</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 50%, #FFE66D 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+            background: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, #FFE66D, #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .core-concepts {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .concept-card {
+            background: white;
+            padding: 25px 45px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4);
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+        }
+        
+        .concept-card h3 {
+            color: #FF6B6B;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .concept-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .info-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+        
+        .info-panel h2 {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .achievement-standards {
+            margin-bottom: 25px;
+        }
+        
+        .standard-item {
+            background: linear-gradient(135deg, #fff5f5, #f0ffff);
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #FF6B6B;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .standard-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.2);
+        }
+        
+        .standard-item strong {
+            color: #4ECDC4;
+        }
+        
+        .generalization {
+            margin-bottom: 25px;
+        }
+        
+        .generalization li {
+            margin: 12px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #333;
+        }
+        
+        .generalization li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+        
+        .strand-container {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .strand-container h2 {
+            background: linear-gradient(135deg, #4ECDC4, #FFE66D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .strand-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .strand-tab {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .strand-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .strand-tab.active {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+        }
+        
+        .strand-tab .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FFE66D;
+            color: #333;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .strand-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .strand-content.active {
+            display: block;
+        }
+        
+        .lesson-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .lesson-card {
+            background: linear-gradient(135deg, #fafafa, #ffffff);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .lesson-card.identity {
+            border-left-color: #FF6B6B;
+        }
+        
+        .lesson-card.collaboration {
+            border-left-color: #4ECDC4;
+        }
+        
+        .lesson-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .lesson-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .lesson-number {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .lesson-card .objective {
+            color: #666;
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+        
+        .lesson-card .activities {
+            background: rgba(78,205,196,0.1);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .products-section {
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+        
+        .products-section h2 {
+            background: linear-gradient(135deg, #FFE66D, #FF6B6B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-item {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-item::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        
+        .product-item:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .product-item:hover::after {
+            transform: rotate(90deg);
+        }
+        
+        .product-item h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .product-item p {
+            font-size: 0.95em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .inquiry-questions {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff9e6, #e6fffc);
+            border-radius: 15px;
+            border: 2px dashed #4ECDC4;
+        }
+        
+        .inquiry-questions h3 {
+            color: #FF6B6B;
+            margin-bottom: 15px;
+        }
+        
+        .question-type {
+            margin: 12px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .question-type:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .question-type strong {
+            color: #4ECDC4;
+        }
+        
+        .stage-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: #FFE66D;
+            color: #333;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .emoji-icon {
+            font-size: 1.5em;
+            margin-right: 8px;
+        }
+        
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            right: 10%;
+            animation-delay: 5s;
+        }
+        
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            left: 50%;
+            animation-delay: 10s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌈 꿈과 끼를 펼쳐요</h1>
+            <p>정체성과 협동을 통한 자기 발견 프로젝트 | 초등 4학년 | 15차시</p>
+        </div>
+        
+        <div class="core-concepts">
+            <div class="concept-card">
+                <h3>🎭 정체성</h3>
+                <p>Identity</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">나는 누구인가?</p>
+            </div>
+            <div class="concept-card">
+                <h3>🤝 협동</h3>
+                <p>Collaboration</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">함께 성장하기</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="info-panel">
+                <h2>📚 프로젝트 개요</h2>
+                
+                <div class="achievement-standards">
+                    <h3>성취기준</h3>
+                    <div class="standard-item">
+                        <strong>국어</strong><br>
+                        [4국06-02] 매체를 활용한 발표 자료 제작<br>
+                        [4국01-05] 목적과 주제에 맞는 발표
+                    </div>
+                    <div class="standard-item">
+                        <strong>도덕</strong><br>
+                        [4도02-04] 경청·도덕적 대화·협동 실천
+                    </div>
+                    <div class="standard-item">
+                        <strong>음악</strong><br>
+                        [4음03-03] 음악 요소로 자기 표현<br>
+                        [4음01-04] 생활 속 음악 활동 참여
+                    </div>
+                    <div class="standard-item">
+                        <strong>미술</strong><br>
+                        [4미02-04] 다양한 표현 방법 탐색
+                    </div>
+                </div>
+                
+                <div class="generalization">
+                    <h3>일반화 문장</h3>
+                    <ol>
+                        <li>정체성은 탐구와 표현 속에서 드러나고 성장한다</li>
+                        <li>협동은 타인의 피드백을 통해 정체성을 더욱 선명하게 만든다</li>
+                        <li>꿈과 끼는 협동 속에서 공동체적으로 확장된다</li>
+                    </ol>
+                </div>
+                
+                <div class="inquiry-questions">
+                    <h3>탐구 질문</h3>
+                    <div class="question-type">
+                        <strong>사실적 질문:</strong><br>
+                        내가 좋아하는 활동이나 잘하는 일은 무엇인가?
+                    </div>
+                    <div class="question-type">
+                        <strong>개념적 질문:</strong><br>
+                        협동은 왜 나의 강점과 정체성을 드러내는 데 중요한가?
+                    </div>
+                    <div class="question-type">
+                        <strong>논쟁적 질문:</strong><br>
+                        꿈과 끼는 개인의 것일까, 공동체의 것일까?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="strand-container">
+                <h2>🎨 스트랜드별 학습 활동</h2>
+                
+                <div class="strand-tabs">
+                    <button class="strand-tab active" onclick="showStrand('strand1')">
+                        <span class="emoji-icon">🎭</span> 스트랜드 ① 정체성
+                        <span class="badge">8</span>
+                    </button>
+                    <button class="strand-tab" onclick="showStrand('strand2')">
+                        <span class="emoji-icon">🤝</span> 스트랜드 ② 협동
+                        <span class="badge">7</span>
+                    </button>
+                </div>
+                
+                <div id="strand1" class="strand-content active">
+                    <h3 style="color: #FF6B6B; margin-bottom: 20px;">스트랜드 ① 정체성 (Identity) - 1~8차시</h3>
+                    
+                    <div class="lesson-grid">
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">1</span> 나 탐색 인터뷰 <span class="stage-indicator">관계맺기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 자기 탐색의 단서를 발견한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 짝 인터뷰로 "내가 좋아하는 것·잘하는 것" 이야기 나누기<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">2</span> 정체성의 증거 수집 <span class="stage-indicator">집중하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 정체성을 뒷받침할 근거를 모은다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 경험·사진·작품을 카드화해 "나 바구니" 만들기<br>
+                                <strong>교과:</strong> 국어+미술
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">3</span> 정체성 한 문장 <span class="stage-indicator">집중하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 자기 정체성을 언어로 정리한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> "나는 ○○한 사람이다, 왜냐하면…" 자기소개 문장 작성<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">4</span> 정체성의 근거와 특징 <span class="stage-indicator">조사하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 정체성이 경험과 특징에서 비롯됨을 이해한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 강점 사례 공유, "나의 대표 특징" 토론<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">5</span> 음악으로 정체성 표현 <span class="stage-indicator">조사하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 음악 요소로 정체성을 형상화한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 나를 상징하는 리듬·멜로디 만들기<br>
+                                <strong>교과:</strong> 음악
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">6</span> 이미지로 정체성 표현 <span class="stage-indicator">조사하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 시각적 형식으로 정체성을 드러낸다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> "꿈·끼"를 상징하는 포스터 스케치<br>
+                                <strong>교과:</strong> 미술
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">7</span> 발표 기획하기 <span class="stage-indicator">조직하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 나를 표현하는 발표 자료의 틀을 세운다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 발표 목적과 청중 설정 → 자료 개요 작성<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card identity">
+                            <h4><span class="lesson-number">8</span> 발표 초안 작성 <span class="stage-indicator">조직하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 자기 정체성을 구체적 형식으로 표현한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> PPT·영상·포스터 중 선택해 발표 자료 초안 제작<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="strand2" class="strand-content">
+                    <h3 style="color: #4ECDC4; margin-bottom: 20px;">스트랜드 ② 협동 (Collaboration) - 9~15차시</h3>
+                    
+                    <div class="lesson-grid">
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">9</span> 협동의 의미 이해 <span class="stage-indicator">집중하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동이 개인 성장에 기여하는 이유를 탐구한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 협동과 경청의 사례 분석, 역할극<br>
+                                <strong>교과:</strong> 도덕
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">10</span> 협동적 대화 훈련 <span class="stage-indicator">조사하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동적 피드백 방법을 익힌다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> "칭찬–근거–제안" 피드백 문장 연습<br>
+                                <strong>교과:</strong> 국어+도덕
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">11</span> 리허설과 피드백 <span class="stage-indicator">조직하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동 속에서 자기 발표를 개선한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 모둠별 발표 리허설 → 동료 피드백 반영<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">12</span> 최종 자료 완성 <span class="stage-indicator">조직하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동적 과정을 통해 완성도를 높인다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 피드백 반영 → 음악·미술 요소 보완 → 최종 발표물 제작<br>
+                                <strong>교과:</strong> 국어+음악·미술
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">13</span> 학급 쇼케이스 <span class="stage-indicator">일반화하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 정체성은 협동적 탐구와 표현 속에서 선명해진다는 일반화에 도달한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> 발표·전시, 관객 질의응답, 협동적 성찰 대화<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">14</span> 성장 계획 세우기 <span class="stage-indicator">전이하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동 경험을 바탕으로 자기 성장 계획을 세운다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> "30일 성장 챌린지" 계획표 작성<br>
+                                <strong>교과:</strong> 국어+도덕
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card collaboration">
+                            <h4><span class="lesson-number">15</span> 성찰 저널 작성 <span class="stage-indicator">성찰하기</span></h4>
+                            <p class="objective"><strong>목표:</strong> 협동 속에서 성장한 정체성을 성찰한다</p>
+                            <div class="activities">
+                                <strong>활동:</strong> "잘한 점–근거–협동 경험–다음 계획" 기록<br>
+                                <strong>교과:</strong> 국어
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="products-section">
+            <h2>🎯 최종 산출물</h2>
+            <div class="products-grid">
+                <div class="product-item">
+                    <h3>📊 개인 발표 자료</h3>
+                    <p>PPT·포스터·영상·음악·미술작품</p>
+                </div>
+                <div class="product-item">
+                    <h3>🎭 학급 쇼케이스</h3>
+                    <p>꿈과 끼를 나누는 발표회</p>
+                </div>
+                <div class="product-item">
+                    <h3>🎨 큐레이션 카드</h3>
+                    <p>작품 의도 및 협동 과정 설명</p>
+                </div>
+                <div class="product-item">
+                    <h3>📔 성찰 저널</h3>
+                    <p>개인의 성장 과정 기록</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showStrand(strandId) {
+            // 모든 탭과 컨텐츠 숨기기
+            const tabs = document.querySelectorAll('.strand-tab');
+            const contents = document.querySelectorAll('.strand-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭과 컨텐츠 보이기
+            event.target.closest('.strand-tab').classList.add('active');
+            document.getElementById(strandId).classList.add('active');
+        }
+        
+        // 페이지 로드 시 애니메이션
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.concept-card, .info-panel, .strand-container, .products-section');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '0';
+                    el.style.animation = 'fadeInUp 0.8s ease forwards';
+                }, index * 100);
+            });
+            
+            // 카드에 호버 효과 추가
+            const cards = document.querySelectorAll('.lesson-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.animation = 'pulse 0.5s ease';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.animation = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
